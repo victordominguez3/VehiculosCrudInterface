@@ -76,7 +76,7 @@ class ConcesionarioController(
         iniciarBotonBuscar()
 
         exportarJson.setOnAction { exportarAJson() }
-        barraBusqueda.setOnAction{ ejecutarBusqueda() }
+        barraBusqueda.setOnKeyReleased{ ejecutarBusqueda() }
         botonBuscar.setOnAction { ejecutarBusqueda() }
         botonEditar.setOnAction { onBotonEditarClick() }
         botonBorrar.setOnAction { onBotonBorrarClick() }

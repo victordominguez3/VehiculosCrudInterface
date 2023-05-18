@@ -43,6 +43,7 @@ object CsvService: VehiculoService {
     }
 
     override fun exportar(items: List<Vehiculo>) {
+        logger.debug { "VehiculoCsvService -> Exportando datos a CSV" }
         csvFile.writeText("ID;Marca;Modelo;Tipo de motor;Kilometraje;Fecha de matriculación;Imagen\n")
         items.forEach {
             csvFile.appendText("${it.id};${it.marca};${it.modelo};${it.tipoMotor};${it.km};${it.fechaMatriculacion};${it.imagen}\n")

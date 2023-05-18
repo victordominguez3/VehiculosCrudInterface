@@ -5,14 +5,14 @@ import com.example.vehiculoscrudinterface.repositories.ConcesionarioRepository
 import com.example.vehiculoscrudinterface.repositories.ConcesionarioRepositoryMemory
 import com.example.vehiculoscrudinterface.routes.RoutesManager
 import javafx.fxml.FXML
-import javafx.scene.control.Alert
-import javafx.scene.control.Button
-import javafx.scene.control.Label
-import javafx.scene.control.TextField
+import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.stage.Stage
+import mu.KotlinLogging
 import kotlin.system.exitProcess
+
+private val logger = KotlinLogging.logger{}
 
 class BorrarViewController(
     val id: String,
@@ -47,6 +47,7 @@ class BorrarViewController(
 
     @FXML
     private fun initialize() {
+        logger.debug { "BorrarViewController -> Iniciando vista" }
         matricula.text = vehiculo?.id
         imagenVehiculo.image = Image(ConcesionarioApplication::class.java.getResourceAsStream(vehiculo?.imagen))
         marcaText.text = vehiculo?.marca
@@ -58,16 +59,37 @@ class BorrarViewController(
     }
 
     private fun onBotonBorrarClick() {
-        repository.eliminarPorId(id)
-        val stage = botonBorrar.scene.window
-        if (stage is Stage) {
+        logger.debug { "BorrarViewController -> Botón Borrar pulsado" }
+        val alert = Alert(Alert.AlertType.CONFIRMATION)
+            .apply {
+                title = "Aviso importante"
+                headerText = "Eliminar vehículo"
+                contentText = "¿Está seguro de eliminar este vehículo de la base de datos?"
+            }
+        alert.buttonTypes.setAll(ButtonType.YES, ButtonType.NO)
+        val result = alert.showAndWait()
+        if (result.get() == ButtonType.YES) {
+            logger.debug { "BorrarViewController -> Eliminando vehículo" }
+            repository.eliminarPorId(id)
+            val stage = botonBorrar.scene.window
+            if (stage is Stage) {
+                Alert(Alert.AlertType.INFORMATION)
+                    .apply {
+                        title = "Alerta de información"
+                        headerText = "Vehículo borrado con éxito"
+                    }.showAndWait()
+                stage.close()
+            }
+        } else {
             Alert(Alert.AlertType.INFORMATION)
                 .apply {
-                    title = "Alerta de información"
-                    headerText = "Vehículo borrado con éxito"
+                    title = "Aviso informativo"
+                    headerText = "Proceso cancelado"
                 }.showAndWait()
-            stage.close()
         }
+
+
+
     }
 
 }

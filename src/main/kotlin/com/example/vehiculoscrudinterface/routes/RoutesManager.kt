@@ -12,7 +12,10 @@ import javafx.scene.control.Alert
 import javafx.scene.image.Image
 import javafx.stage.Modality
 import javafx.stage.Stage
+import mu.KotlinLogging
 import java.util.Collections
+
+private val logger = KotlinLogging.logger{}
 
 object RoutesManager {
 
@@ -27,6 +30,7 @@ object RoutesManager {
     private val controladorPrincipal = ConcesionarioController()
 
     fun initMainStage(stage: Stage) {
+        logger.debug { "RoutesManager -> Iniciando Stage Principal" }
         val fxmlLoader = FXMLLoader(ConcesionarioApplication::class.java.getResource("views/vista-principal.fxml"))
 
         fxmlLoader.setController(controladorPrincipal)
@@ -41,6 +45,7 @@ object RoutesManager {
     }
 
     fun borrarStage(id: String) {
+        logger.debug { "RoutesManager -> Iniciando Stage Borrar" }
         val fxmlLoader = FXMLLoader(ConcesionarioApplication::class.java.getResource("views/vista-borrar.fxml"))
         val controlador = BorrarViewController(id)
         fxmlLoader.setController(controlador)
@@ -59,6 +64,7 @@ object RoutesManager {
     }
 
     fun editarStage(id: String) {
+        logger.debug { "RoutesManager -> Iniciando Stage Editar" }
         val fxmlLoader = FXMLLoader(ConcesionarioApplication::class.java.getResource("views/vista-editar.fxml"))
         val controlador = EditarViewController(id)
         fxmlLoader.setController(controlador)
@@ -77,6 +83,7 @@ object RoutesManager {
     }
 
     fun agregarStage() {
+        logger.debug { "RoutesManager -> Iniciando Stage Agregar" }
         val fxmlLoader = FXMLLoader(ConcesionarioApplication::class.java.getResource("views/vista-agregar.fxml"))
         val controlador = AgregarViewController()
         fxmlLoader.setController(controlador)

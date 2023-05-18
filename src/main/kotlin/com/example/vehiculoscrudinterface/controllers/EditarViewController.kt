@@ -13,6 +13,9 @@ import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.stage.Stage
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger{}
 
 class EditarViewController(
     val id: String,
@@ -69,6 +72,7 @@ class EditarViewController(
 
     @FXML
     private fun initialize() {
+        logger.debug { "EditarViewController -> Iniciando vista" }
         matricula.text = vehiculo?.id
         imagenVehiculo.image = Image(ConcesionarioApplication::class.java.getResourceAsStream(vehiculo?.imagen))
 
@@ -86,11 +90,12 @@ class EditarViewController(
     }
 
     private fun onBotonColoresClick() {
+        logger.debug { "EditarViewController -> Color seleccionado, cambiando imagen" }
         imagenVehiculo.image = Image(ConcesionarioApplication::class.java.getResourceAsStream(asignarImagen(seleccionColor.value)))
     }
 
     private fun onBotonGuardarClick() {
-
+        logger.debug { "EditarViewController -> Botón Guardar pulsado" }
         if (kilometrajeText.text.toIntOrNull() == null) {
             Alert(Alert.AlertType.ERROR)
                 .apply {
@@ -111,6 +116,7 @@ class EditarViewController(
         )
 
         vehiculo.validar().onSuccess {
+            logger.debug { "EditarViewController -> Vehículo validado, añadiendo a la base de datos" }
             repository.salvar(vehiculo)
             val stage = botonGuardar.scene.window
             if (stage is Stage) {

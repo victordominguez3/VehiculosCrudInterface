@@ -13,6 +13,10 @@ import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.stage.Stage
+import mu.KotlinLogging
+import kotlin.math.log
+
+private val logger = KotlinLogging.logger{}
 
 class AgregarViewController(
     val repository: ConcesionarioRepository = ConcesionarioRepositoryMemory()
@@ -69,6 +73,7 @@ class AgregarViewController(
 
     @FXML
     private fun initialize() {
+        logger.debug { "AgregarViewController -> Iniciando vista" }
         botonGuardar.isDisable = true
         matriculaText.text = ""
         imagenVehiculo.image = Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/coche.png"))
@@ -91,10 +96,12 @@ class AgregarViewController(
     }
 
     private fun onBotonColoresClick() {
+        logger.debug { "AgregarViewController -> Color seleccionado, cambiando imagen" }
         imagenVehiculo.image = Image(ConcesionarioApplication::class.java.getResourceAsStream(asignarImagen(seleccionColor.value)))
     }
 
     private fun onBotonComprobarClick() {
+        logger.debug { "AgregarViewController -> Botón Comprobar pulsado" }
         if (seleccionMotor.value == null) {
             Alert(Alert.AlertType.ERROR)
                 .apply {
@@ -139,6 +146,7 @@ class AgregarViewController(
         )
 
         vehiculo.validar().onSuccess {
+            logger.debug { "AgregarViewController -> Vehículo validado" }
             Alert(Alert.AlertType.INFORMATION)
                 .apply {
                     title = "Alerta de confirmación"
@@ -156,6 +164,7 @@ class AgregarViewController(
     }
 
     private fun onBotonGuardarClick() {
+        logger.debug { "AgregarViewController -> Botón Guardar pulsado, agregando vehículo a la base de datos" }
         repository.salvar(
             Vehiculo(
                 matriculaText.text.uppercase(),
@@ -192,18 +201,18 @@ class AgregarViewController(
         }
     }
 
-    private fun asignarColor(value: String?): String {
-        return when (value) {
-            "icons/cocheAmarillo.png" -> "Amarillo"
-            "icons/cocheAzul.png" -> "Azul"
-            "icons/cocheAzulOscuro.png" -> "Azul oscuro"
-            "icons/cocheBlanco.png" -> "Blanco"
-            "icons/cocheMorado.png" -> "Morado"
-            "icons/cocheNegro.png" -> "Negro"
-            "icons/cocheRojo.png" -> "Rojo"
-            "icons/cocheRosa.png" -> "Rosa"
-            else -> "Verde"
-        }
-    }
+//    private fun asignarColor(value: String?): String {
+//        return when (value) {
+//            "icons/cocheAmarillo.png" -> "Amarillo"
+//            "icons/cocheAzul.png" -> "Azul"
+//            "icons/cocheAzulOscuro.png" -> "Azul oscuro"
+//            "icons/cocheBlanco.png" -> "Blanco"
+//            "icons/cocheMorado.png" -> "Morado"
+//            "icons/cocheNegro.png" -> "Negro"
+//            "icons/cocheRojo.png" -> "Rojo"
+//            "icons/cocheRosa.png" -> "Rosa"
+//            else -> "Verde"
+//        }
+//    }
 
 }

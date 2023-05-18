@@ -3,7 +3,6 @@ package com.example.vehiculoscrudinterface.controllers
 import com.example.vehiculoscrudinterface.ConcesionarioApplication
 import com.example.vehiculoscrudinterface.models.Vehiculo
 import com.example.vehiculoscrudinterface.repositories.ConcesionarioRepositoryMemory
-import com.example.vehiculoscrudinterface.routes.RoutesManager
 import com.example.vehiculoscrudinterface.routes.RoutesManager.agregarStage
 import com.example.vehiculoscrudinterface.routes.RoutesManager.borrarStage
 import com.example.vehiculoscrudinterface.routes.RoutesManager.editarStage
@@ -14,6 +13,9 @@ import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger{}
 
 class ConcesionarioController(
     private val repository: ConcesionarioRepositoryMemory = ConcesionarioRepositoryMemory(),
@@ -58,7 +60,7 @@ class ConcesionarioController(
 
     @FXML
     private fun initialize() {
-
+        logger.debug { "ConcesionarioController -> Iniciando vista principal" }
         listaVehiculos.selectionModel.selectedIndexProperty().addListener { _, _, value ->
             if (value in 0 until listaVehiculos.items.size) {
                 rellenarCampos(listaVehiculos.items[value.toInt()])
@@ -70,7 +72,7 @@ class ConcesionarioController(
         menuArchivo.items.add(MenuItem("Agregar vehículo"))
         menuArchivo.items.add(MenuItem("Eliminar todos los vehículos"))
         menuArchivo.items.add(MenuItem("Exportar a CSV"))
-        menuArchivo.items[0].setOnAction { onBotonAgregarVechículo() }
+        menuArchivo.items[0].setOnAction { onBotonAgregarVechiculo() }
         menuArchivo.items[1].setOnAction { onBotonEliminarTodosClick() }
         menuArchivo.items[2].setOnAction { onBotonExportarCsvClick() }
         barraBusqueda.setOnKeyReleased{ ejecutarBusqueda() }
@@ -86,6 +88,7 @@ class ConcesionarioController(
     }
 
     private fun onBotonExportarCsvClick() {
+        logger.debug { "ConcesionarioController -> Botón Exportar a CSV pulsado" }
         service.exportar(repository.buscarTodos())
         Alert(Alert.AlertType.INFORMATION)
             .apply {
@@ -95,11 +98,13 @@ class ConcesionarioController(
             }.showAndWait()
     }
 
-    private fun onBotonAgregarVechículo() {
+    private fun onBotonAgregarVechiculo() {
+        logger.debug { "ConcesionarioController -> Botón Agregar vehículo pulsado, abriendo vista Agregar" }
         agregarStage()
     }
 
     private fun onBotonEliminarTodosClick() {
+        logger.debug { "ConcesionarioController -> Botón borrar todos pulsado" }
         val alert = Alert(Alert.AlertType.CONFIRMATION)
             .apply {
                 title = "Aviso importante"
@@ -109,6 +114,7 @@ class ConcesionarioController(
         alert.buttonTypes.setAll(ButtonType.YES, ButtonType.NO)
         val result = alert.showAndWait()
         if (result.get() == ButtonType.YES) {
+            logger.debug { "ConcesionarioController -> Eliminando todos los vehículos" }
             repository.eliminarTodos()
             actualizarLista()
             Alert(Alert.AlertType.INFORMATION)
@@ -128,6 +134,7 @@ class ConcesionarioController(
     }
 
     private fun rellenarCampos(item: Vehiculo) {
+        logger.debug { "ConcesionarioController -> Rellenando campos" }
         matricula.text = item.id
         imagenVehiculo.image = Image(ConcesionarioApplication::class.java.getResourceAsStream(item.imagen))
         marcaText.text = item.marca
@@ -140,6 +147,7 @@ class ConcesionarioController(
     }
 
     private fun resetearCampos() {
+        logger.debug { "ConcesionarioController -> Reseteando campos" }
         matricula.text = "       "
         imagenVehiculo.image = Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/coche.png"))
         marcaText.text = ""
@@ -152,19 +160,23 @@ class ConcesionarioController(
     }
 
     private fun ejecutarBusqueda() {
+        logger.debug { "ConcesionarioController -> Ejecutando búsqueda" }
         val vehiculos = repository.buscarTodos().filter { it.id.contains(barraBusqueda.text.uppercase()) }
         listaVehiculos.items = observableArrayList(vehiculos)
     }
 
     private fun onBotonEditarClick() {
+        logger.debug { "ConcesionarioController -> Botón Editar pulsado, abriendo vista Editar" }
         editarStage(matricula.text)
     }
 
     private fun onBotonBorrarClick() {
+        logger.debug { "ConcesionarioController -> Botón Borrar pulsado, abriendo vista Borrar" }
         borrarStage(matricula.text)
     }
 
     fun actualizarLista() {
+        logger.debug { "ConcesionarioController -> Actualizando ListView" }
         listaVehiculos.items = observableArrayList(repository.buscarTodos())
     }
 

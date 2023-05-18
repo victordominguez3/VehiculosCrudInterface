@@ -1,6 +1,9 @@
 package com.example.vehiculoscrudinterface.config
 
+import mu.KotlinLogging
 import java.util.Properties
+
+private val logger = KotlinLogging.logger{}
 
 object AppConfig {
     lateinit var app_name: String
@@ -9,12 +12,12 @@ object AppConfig {
     lateinit var app_url: String
     lateinit var app_init_url: String
 
-
     init {
         loadProperties()
     }
 
     private fun loadProperties() {
+        logger.debug { "AppConfig -> Cargando propiedades de la aplicación" }
         val properties = Properties()
         properties.load(AppConfig::class.java.getResourceAsStream("/config.properties"))
         app_name = properties.getProperty("app.name") ?: "Concesionario"

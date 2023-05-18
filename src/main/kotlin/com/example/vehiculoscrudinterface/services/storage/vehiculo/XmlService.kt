@@ -1,11 +1,10 @@
 package com.example.vehiculoscrudinterface.services.storage.vehiculo
 
-//import com.example.vehiculoscrudinterface.mappers.toVehiculoListDto
-//import com.example.vehiculoscrudinterface.models.Vehiculo
-//import mu.KotlinLogging
-//import org.simpleframework.xml.core.Persister
-//import java.io.File
-//
+import com.example.vehiculoscrudinterface.mappers.toVehiculoListDto
+import com.example.vehiculoscrudinterface.models.Vehiculo
+import mu.KotlinLogging
+import java.io.File
+
 //private val logger = KotlinLogging.logger{}
 //
 //object XmlService: VehiculoService {

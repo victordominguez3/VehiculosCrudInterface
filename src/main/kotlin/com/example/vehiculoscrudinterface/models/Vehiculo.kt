@@ -7,12 +7,12 @@ import java.util.Date
 
 data class Vehiculo(
     val id: String,
-    val marca: String,
-    val modelo: String,
-    val tipoMotor: TipoMotor,
-    val km: Int,
-    val fechaMatriculacion: LocalDate,
-    val imagen: Image
+    var marca: String,
+    var modelo: String,
+    var tipoMotor: TipoMotor,
+    var km: Int,
+    var fechaMatriculacion: LocalDate,
+    var imagen: String
     ) {
     override fun toString(): String {
         return "Vehiculo - " +

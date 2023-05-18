@@ -49,7 +49,7 @@ class ConcesionarioRepositoryMemory(
                         TipoMotor.valueOf(result.getString(4)),
                         result.getInt(5),
                         LocalDate.parse(result.getString(6)),
-                        iconos.random()
+                        result.getString(7)
                     )
                 )
             }
@@ -73,7 +73,7 @@ class ConcesionarioRepositoryMemory(
                     TipoMotor.valueOf(result.getString(4)),
                     result.getInt(5),
                     LocalDate.parse(result.getString(6)),
-                    iconos.random()
+                    result.getString(7)
                 )
             }
         }
@@ -111,7 +111,7 @@ class ConcesionarioRepositoryMemory(
     private fun guardar(item: Vehiculo): Vehiculo {
         logger.debug { "ConcesionarioRepository -> Guardar vehículo: $item" }
 
-        val sql = "INSERT INTO TVehiculos VALUES (?, ?, ?, ?, ?, ?)"
+        val sql = "INSERT INTO TVehiculos VALUES (?, ?, ?, ?, ?, ?, ?)"
 
         database.connection.prepareStatement(sql).use { stm ->
             stm.setString(1, item.id)
@@ -120,6 +120,7 @@ class ConcesionarioRepositoryMemory(
             stm.setString(4, item.tipoMotor.toString())
             stm.setInt(5, item.km)
             stm.setString(6, item.fechaMatriculacion.toString())
+            stm.setString(7, item.imagen)
             stm.executeUpdate()
         }
         return item
@@ -128,7 +129,7 @@ class ConcesionarioRepositoryMemory(
     private fun actualizar(item: Vehiculo): Vehiculo {
         logger.debug { "ConcesionarioRepository -> Actualizar vehículo: $item" }
 
-        val sql = "UPDATE TVehiculos SET cMarca = ?, cModelo = ?, cTipoMotor = ?, nKilometraje = ?, cMatriculacion = ? WHERE cId = ?"
+        val sql = "UPDATE TVehiculos SET cMarca = ?, cModelo = ?, cTipoMotor = ?, nKilometraje = ?, cMatriculacion = ?, cImagen = ? WHERE cId = ?"
 
         database.connection.prepareStatement(sql).use { stm ->
             stm.setString(1, item.marca)
@@ -136,7 +137,8 @@ class ConcesionarioRepositoryMemory(
             stm.setString(3, item.tipoMotor.toString())
             stm.setInt(4, item.km)
             stm.setString(5, item.fechaMatriculacion.toString())
-            stm.setString(6, item.id)
+            stm.setString(6, item.imagen)
+            stm.setString(7, item.id)
             stm.executeUpdate()
         }
         return item

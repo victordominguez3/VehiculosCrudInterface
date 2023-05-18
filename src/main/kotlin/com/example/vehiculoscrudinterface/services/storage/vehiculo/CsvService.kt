@@ -16,20 +16,37 @@ object CsvService: VehiculoService {
 
     private val path = "${System.getProperty("user.dir")}${File.separator}src${File.separator}main${File.separator}resources${File.separator}vehiculos.csv"
     private val fichero = File(path)
-    private val iconos = listOf<Image>(
-        Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/cocheAmarillo.png")),
-        Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/cocheAzul.png")),
-        Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/cocheAzulOscuro.png")),
-        Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/cocheBlanco.png")),
-        Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/cocheMorado.png")),
-        Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/cocheNegro.png")),
-        Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/cocheRojo.png")),
-        Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/cocheRosa.png")),
-        Image(ConcesionarioApplication::class.java.getResourceAsStream("icons/cocheVerde.png"))
+    private val iconos = listOf<String>(
+        "icons/cocheAmarillo.png",
+        "icons/cocheAzul.png",
+        "icons/cocheAzulOscuro.png",
+        "icons/cocheBlanco.png",
+        "icons/cocheMorado.png",
+        "icons/cocheNegro.png",
+        "icons/cocheRojo.png",
+        "icons/cocheRosa.png",
+        "icons/cocheVerde.png"
     )
 
+    private val dataPath = File("${System.getProperty("user.dir")}${File.separator}data")
+    private val csvFile = File(dataPath, "vehiculos.csv")
+
+    init {
+        if (!dataPath.exists()) {
+            logger.debug { "VehiculoCsvService -> Creando directorio DATA" }
+            dataPath.mkdir()
+        }
+        if (!csvFile.exists()) {
+            logger.debug { "VehiculoCsvService -> Creando fichero CSV" }
+            csvFile.createNewFile()
+        }
+    }
+
     override fun exportar(items: List<Vehiculo>) {
-        TODO("Not yet implemented")
+        csvFile.writeText("ID;Marca;Modelo;Tipo de motor;Kilometraje;Fecha de matriculación;Imagen\n")
+        items.forEach {
+            csvFile.appendText("${it.id};${it.marca};${it.modelo};${it.tipoMotor};${it.km};${it.fechaMatriculacion};${it.imagen}\n")
+        }
     }
 
     override fun importar(): List<Vehiculo> {
